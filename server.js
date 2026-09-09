@@ -4,6 +4,7 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ const io = new Server(server, {
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ============================================
 // DATA STRUCTURES FOR ROOM & FRIEND MANAGEMENT
@@ -66,6 +68,14 @@ class GameRoom {
     return this.players.length === 0;
   }
 }
+
+// ============================================
+// HOME ROUTE
+// ============================================
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // ============================================
 // REST API ENDPOINTS
